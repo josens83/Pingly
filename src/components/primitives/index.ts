@@ -6,6 +6,10 @@ export type { ButtonProps, IconButtonProps } from './Button'
 export { Input, inputVariants } from './Input'
 export type { InputProps } from './Input'
 
+// Label
+export { Label, FormLabel, labelVariants } from './Label'
+export type { LabelProps, FormLabelProps } from './Label'
+
 // Card
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent, MetricCard, cardVariants } from './Card'
 export type { CardProps, MetricCardProps } from './Card'
