@@ -20,7 +20,7 @@ const contentMotion = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
   },
   exit: {
     opacity: 0,
@@ -35,7 +35,7 @@ const slideMotion = {
   animate: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }
   },
   exit: {
     opacity: 0,
@@ -105,7 +105,7 @@ const ModalClose = DialogPrimitive.Close
 const ModalOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+>(({ className }, ref) => (
   <DialogPrimitive.Overlay ref={ref} asChild>
     <motion.div
       className={cn(
@@ -113,7 +113,6 @@ const ModalOverlay = React.forwardRef<
         className
       )}
       {...overlayMotion}
-      {...props}
     />
   </DialogPrimitive.Overlay>
 ))
@@ -129,9 +128,9 @@ export interface ModalContentProps
 const ModalContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   ModalContentProps
->(({ className, children, variant, size, position, showClose = true, ...props }, ref) => {
+>(({ className, children, variant, size, position, showClose = true }, ref) => {
   const isSheet = variant === 'sheet'
-  const motion = isSheet ? slideMotion : contentMotion
+  const motionVariant = isSheet ? slideMotion : contentMotion
 
   return (
     <ModalContext.Provider value={{ variant }}>
@@ -141,8 +140,7 @@ const ModalContent = React.forwardRef<
           <DialogPrimitive.Content ref={ref} asChild>
             <motion.div
               className={cn(modalVariants({ variant, size, position }), className)}
-              {...motion}
-              {...props}
+              {...motionVariant}
             >
               {children}
               {showClose && (

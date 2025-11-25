@@ -106,7 +106,7 @@ const presetConfigs: Record<ErrorPreset, {
 }
 
 export interface ErrorStateProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'>,
     VariantProps<typeof errorStateVariants> {
   preset?: ErrorPreset
   icon?: React.ElementType

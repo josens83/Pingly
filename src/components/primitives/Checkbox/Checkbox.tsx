@@ -46,7 +46,7 @@ const checkboxVariants = cva(
 
 const checkIconVariants = {
   hidden: { opacity: 0, scale: 0.5 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.15, ease: 'easeOut' } },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.15, ease: 'easeOut' as const } },
 }
 
 export interface CheckboxProps

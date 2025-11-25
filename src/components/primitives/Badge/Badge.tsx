@@ -71,7 +71,7 @@ const dotVariants = cva('rounded-full', {
 })
 
 export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'>,
     VariantProps<typeof badgeVariants> {
   removable?: boolean
   onRemove?: () => void

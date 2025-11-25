@@ -55,15 +55,16 @@ const cardMotion = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 10 },
-  hover: { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } },
+  hover: { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
   tap: { y: 0, transition: { duration: 0.1 } },
 }
 
 export interface CardProps
-  extends Omit<HTMLMotionProps<'div'>, 'padding'>,
+  extends Omit<HTMLMotionProps<'div'>, 'padding' | 'children'>,
     VariantProps<typeof cardVariants> {
   asChild?: boolean
   animateOnMount?: boolean
+  children?: React.ReactNode
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
@@ -170,7 +171,7 @@ const CardFooter = React.forwardRef<
 CardFooter.displayName = 'CardFooter'
 
 // Metric Card - 통계 표시용 특화 카드
-export interface MetricCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MetricCardProps {
   title: string
   value: string | number
   change?: {
@@ -179,11 +180,12 @@ export interface MetricCardProps extends React.HTMLAttributes<HTMLDivElement> {
   }
   icon?: React.ReactNode
   trend?: React.ReactNode
+  className?: string
 }
 
 const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
-  ({ className, title, value, change, icon, trend, ...props }, ref) => (
-    <Card ref={ref} variant="gradient" className={cn('p-6', className)} {...props}>
+  ({ className, title, value, change, icon, trend }, ref) => (
+    <Card ref={ref} variant="gradient" className={cn('p-6', className)}>
       <div className="flex items-start justify-between">
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>

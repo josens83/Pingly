@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ contact }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors[0].message }, { status: 400 })
+      return NextResponse.json({ error: error.issues[0].message }, { status: 400 })
     }
     console.error('Contacts POST error:', error)
     return NextResponse.json({ error: '연락처 생성 중 오류가 발생했습니다.' }, { status: 500 })

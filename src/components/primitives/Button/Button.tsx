@@ -92,13 +92,14 @@ const buttonMotion = {
 }
 
 export interface ButtonProps
-  extends Omit<HTMLMotionProps<'button'>, 'size'>,
+  extends Omit<HTMLMotionProps<'button'>, 'size' | 'children'>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean
   loadingText?: string
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   asChild?: boolean
+  children?: React.ReactNode
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

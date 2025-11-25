@@ -82,7 +82,7 @@ const presetConfigs: Record<EmptyStatePreset, { icon: LucideIcon; title: string;
 }
 
 export interface EmptyStateProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'>,
     VariantProps<typeof emptyStateVariants> {
   preset?: EmptyStatePreset
   icon?: LucideIcon | React.ReactNode
@@ -146,9 +146,9 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
         >
           {React.isValidElement(IconComponent) ? (
             IconComponent
-          ) : (
+          ) : typeof IconComponent === 'function' ? (
             <IconComponent className={iconSize} />
-          )}
+          ) : null}
         </motion.div>
 
         {/* Text Content */}

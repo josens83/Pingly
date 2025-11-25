@@ -52,7 +52,7 @@ const checkmarkVariants = {
     pathLength: 1,
     opacity: 1,
     transition: {
-      pathLength: { duration: 0.5, ease: 'easeInOut' },
+      pathLength: { duration: 0.5, ease: 'easeInOut' as const },
       opacity: { duration: 0.2 },
     },
   },
@@ -63,7 +63,7 @@ const circleVariants = {
   visible: {
     scale: 1,
     opacity: 1,
-    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
   },
 }
 
@@ -138,7 +138,7 @@ const ConfettiParticles: React.FC = () => {
 }
 
 export interface SuccessStateProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onAnimationStart' | 'onAnimationEnd' | 'onDrag' | 'onDragStart' | 'onDragEnd'>,
     VariantProps<typeof successStateVariants> {
   variant?: 'default' | 'gradient' | 'celebration'
   icon?: 'check' | 'animated' | 'party' | 'sparkles' | React.ReactNode

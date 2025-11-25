@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 조직과 사용자 생성 (트랜잭션)
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: typeof prisma) => {
       // 조직 생성
       const organization = await tx.organization.create({
         data: {

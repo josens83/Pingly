@@ -57,8 +57,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id
-        token.role = user.role
-        token.organizationId = user.organizationId
+        token.role = user.role || 'USER'
+        token.organizationId = user.organizationId || null
       }
 
       if (trigger === 'update' && session) {
