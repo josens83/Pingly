@@ -2,11 +2,20 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Select } from '@/components/ui/select'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  Card,
+  MetricCard,
+  Button,
+  Badge,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/primitives'
+import { EmptyState } from '@/components/patterns'
 import {
   Plus,
   Search,
@@ -21,8 +30,26 @@ import {
   Copy,
   Trash2,
   Eye,
+  ArrowUpRight,
+  Calendar,
+  Target,
+  TrendingUp,
+  Zap,
+  Users,
+  BarChart3,
+  ChevronDown,
 } from 'lucide-react'
-import { formatDateTime, getMessageTypeLabel, getStatusColor } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+
+// Animation variants
+const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+}
+
+const stagger = {
+  animate: { transition: { staggerChildren: 0.05 } },
+}
 
 const campaigns = [
   {
@@ -30,7 +57,7 @@ const campaigns = [
     name: '11월 프로모션 캠페인',
     type: 'SMS',
     status: 'COMPLETED',
-    content: '[Pingly] 11월 한정 특가! 전 상품 20% 할인 쿠폰을 지금 바로 받아가세요. 수신거부 080-XXX-XXXX',
+    content: '[Pingly] 11월 한정 특가! 전 상품 20% 할인 쿠폰을 지금 바로 받아가세요.',
     totalRecipients: 1250,
     sentCount: 1250,
     deliveredCount: 1238,
@@ -41,9 +68,9 @@ const campaigns = [
   {
     id: '2',
     name: '신규 가입 혜택 안내',
-    type: 'KAKAO_ALIMTALK',
+    type: 'KAKAO',
     status: 'SENDING',
-    content: '안녕하세요, {{name}}님! Pingly에 가입해주셔서 감사합니다. 신규 가입 혜택으로 1,000원 쿠폰을 드립니다.',
+    content: '안녕하세요, {{name}}님! Pingly에 가입해주셔서 감사합니다.',
     totalRecipients: 500,
     sentCount: 423,
     deliveredCount: 415,
@@ -56,7 +83,7 @@ const campaigns = [
     name: '12월 이벤트 사전 안내',
     type: 'LMS',
     status: 'SCHEDULED',
-    content: '[Pingly] 12월 연말 이벤트가 곧 시작됩니다! 미리 알림 신청하시면 추가 혜택을 드립니다.',
+    content: '[Pingly] 12월 연말 이벤트가 곧 시작됩니다!',
     totalRecipients: 2500,
     sentCount: 0,
     deliveredCount: 0,
@@ -67,9 +94,9 @@ const campaigns = [
   {
     id: '4',
     name: '장바구니 알림',
-    type: 'KAKAO_FRIENDTALK',
+    type: 'KAKAO',
     status: 'DRAFT',
-    content: '{{name}}님, 장바구니에 담아두신 상품이 있어요! 지금 구매하시면 무료 배송 혜택을 드려요.',
+    content: '{{name}}님, 장바구니에 담아두신 상품이 있어요!',
     totalRecipients: 0,
     sentCount: 0,
     deliveredCount: 0,
@@ -79,225 +106,295 @@ const campaigns = [
   },
 ]
 
-const statusOptions = [
-  { value: '', label: '전체 상태' },
-  { value: 'DRAFT', label: '작성중' },
-  { value: 'SCHEDULED', label: '예약됨' },
-  { value: 'SENDING', label: '발송중' },
-  { value: 'COMPLETED', label: '완료' },
-  { value: 'CANCELLED', label: '취소됨' },
-]
+const statusConfig = {
+  DRAFT: { label: '작성중', color: 'secondary' as const, icon: Pause, bgColor: 'bg-muted' },
+  SCHEDULED: { label: '예약됨', color: 'info' as const, icon: Clock, bgColor: 'bg-sky-100' },
+  SENDING: { label: '발송중', color: 'warning' as const, icon: Send, bgColor: 'bg-amber-100' },
+  COMPLETED: { label: '완료', color: 'success' as const, icon: CheckCircle, bgColor: 'bg-mint-100' },
+  CANCELLED: { label: '취소됨', color: 'destructive' as const, icon: XCircle, bgColor: 'bg-rose-100' },
+}
 
-const typeOptions = [
-  { value: '', label: '전체 유형' },
-  { value: 'SMS', label: 'SMS' },
-  { value: 'LMS', label: 'LMS' },
-  { value: 'MMS', label: 'MMS' },
-  { value: 'KAKAO_ALIMTALK', label: '카카오 알림톡' },
-  { value: 'KAKAO_FRIENDTALK', label: '카카오 친구톡' },
-]
+const typeConfig = {
+  SMS: { label: 'SMS', color: 'bg-pingly-100 text-pingly-700' },
+  LMS: { label: 'LMS', color: 'bg-violet-100 text-violet-700' },
+  MMS: { label: 'MMS', color: 'bg-rose-100 text-rose-700' },
+  KAKAO: { label: '카카오톡', color: 'bg-amber-100 text-amber-700' },
+}
 
 export default function CampaignsPage() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [statusFilter, setStatusFilter] = useState('')
-  const [typeFilter, setTypeFilter] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [typeFilter, setTypeFilter] = useState('all')
+  const [showFilters, setShowFilters] = useState(false)
 
   const filteredCampaigns = campaigns.filter((campaign) => {
     const matchesSearch = campaign.name.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesStatus = !statusFilter || campaign.status === statusFilter
-    const matchesType = !typeFilter || campaign.type === typeFilter
+    const matchesStatus = statusFilter === 'all' || campaign.status === statusFilter
+    const matchesType = typeFilter === 'all' || campaign.type === typeFilter
     return matchesSearch && matchesStatus && matchesType
   })
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'COMPLETED':
-        return <CheckCircle className="h-4 w-4 text-green-500" />
-      case 'SENDING':
-        return <Send className="h-4 w-4 text-yellow-500" />
-      case 'SCHEDULED':
-        return <Clock className="h-4 w-4 text-blue-500" />
-      case 'DRAFT':
-        return <Pause className="h-4 w-4 text-gray-500" />
-      case 'CANCELLED':
-        return <XCircle className="h-4 w-4 text-red-500" />
-      default:
-        return null
-    }
-  }
-
-  const getStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
-      DRAFT: '작성중',
-      SCHEDULED: '예약됨',
-      SENDING: '발송중',
-      COMPLETED: '완료',
-      CANCELLED: '취소됨',
-    }
-    return labels[status] || status
+  const stats = {
+    total: campaigns.length,
+    sending: campaigns.filter(c => c.status === 'SENDING').length,
+    scheduled: campaigns.filter(c => c.status === 'SCHEDULED').length,
+    completed: campaigns.filter(c => c.status === 'COMPLETED').length,
   }
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial="initial"
+      animate="animate"
+      variants={stagger}
+    >
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <motion.div
+        variants={fadeInUp}
+        className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+      >
         <div>
           <h1 className="text-2xl font-bold">캠페인 관리</h1>
-          <p className="text-muted-foreground">메시지 캠페인을 생성하고 관리하세요</p>
+          <p className="text-muted-foreground mt-1">메시지 캠페인을 생성하고 관리하세요</p>
         </div>
         <Link href="/dashboard/campaigns/new">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button leftIcon={<Plus className="h-4 w-4" />}>
             새 캠페인
           </Button>
         </Link>
-      </div>
+      </motion.div>
 
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-4">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">전체 캠페인</p>
-            <p className="text-2xl font-bold">{campaigns.length}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">진행중</p>
-            <p className="text-2xl font-bold text-yellow-500">
-              {campaigns.filter((c) => c.status === 'SENDING').length}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">예약됨</p>
-            <p className="text-2xl font-bold text-blue-500">
-              {campaigns.filter((c) => c.status === 'SCHEDULED').length}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-sm text-muted-foreground">완료</p>
-            <p className="text-2xl font-bold text-green-500">
-              {campaigns.filter((c) => c.status === 'COMPLETED').length}
-            </p>
-          </CardContent>
-        </Card>
-      </div>
+      <motion.div variants={fadeInUp} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricCard
+          title="전체 캠페인"
+          value={stats.total.toString()}
+          icon={<Target className="h-5 w-5" />}
+        />
+        <MetricCard
+          title="진행중"
+          value={stats.sending.toString()}
+          icon={<Send className="h-5 w-5" />}
+          change={{ value: '활성', type: 'positive' }}
+        />
+        <MetricCard
+          title="예약됨"
+          value={stats.scheduled.toString()}
+          icon={<Clock className="h-5 w-5" />}
+          change={{ value: '대기중', type: 'positive' }}
+        />
+        <MetricCard
+          title="완료"
+          value={stats.completed.toString()}
+          icon={<CheckCircle className="h-5 w-5" />}
+          change={{ value: '이번 달', type: 'positive' }}
+        />
+      </motion.div>
 
-      {/* Filters */}
-      <Card>
-        <CardContent className="p-4">
+      {/* Search and Filters */}
+      <motion.div variants={fadeInUp}>
+        <Card className="p-4">
           <div className="flex flex-col gap-4 sm:flex-row">
+            {/* Search */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="캠페인 검색..."
-                className="pl-9"
+                variant="filled"
+                className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <Select
-              options={statusOptions}
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full sm:w-40"
-            />
-            <Select
-              options={typeOptions}
-              value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
-              className="w-full sm:w-40"
-            />
+
+            {/* Filter toggle on mobile */}
+            <Button
+              variant="outline"
+              className="sm:hidden"
+              onClick={() => setShowFilters(!showFilters)}
+              leftIcon={<Filter className="h-4 w-4" />}
+            >
+              필터
+              <ChevronDown className={cn("h-4 w-4 ml-2 transition-transform", showFilters && "rotate-180")} />
+            </Button>
+
+            {/* Filters */}
+            <div className={cn(
+              "flex flex-col sm:flex-row gap-2",
+              !showFilters && "hidden sm:flex"
+            )}>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-36">
+                  <SelectValue placeholder="상태" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">전체 상태</SelectItem>
+                  <SelectItem value="DRAFT">작성중</SelectItem>
+                  <SelectItem value="SCHEDULED">예약됨</SelectItem>
+                  <SelectItem value="SENDING">발송중</SelectItem>
+                  <SelectItem value="COMPLETED">완료</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger className="w-full sm:w-36">
+                  <SelectValue placeholder="유형" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">전체 유형</SelectItem>
+                  <SelectItem value="SMS">SMS</SelectItem>
+                  <SelectItem value="LMS">LMS</SelectItem>
+                  <SelectItem value="KAKAO">카카오톡</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </Card>
+      </motion.div>
 
       {/* Campaign List */}
-      <div className="space-y-4">
-        {filteredCampaigns.map((campaign) => (
-          <Card key={campaign.id} className="transition-shadow hover:shadow-md">
-            <CardContent className="p-6">
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex-1 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <h3 className="font-semibold">{campaign.name}</h3>
-                    <Badge variant="outline">{getMessageTypeLabel(campaign.type)}</Badge>
-                    <Badge className={getStatusColor(campaign.status)}>
-                      {getStatusIcon(campaign.status)}
-                      <span className="ml-1">{getStatusLabel(campaign.status)}</span>
-                    </Badge>
+      <motion.div variants={fadeInUp} className="space-y-4">
+        <AnimatePresence mode="popLayout">
+          {filteredCampaigns.map((campaign, i) => {
+            const status = statusConfig[campaign.status as keyof typeof statusConfig]
+            const type = typeConfig[campaign.type as keyof typeof typeConfig]
+            const StatusIcon = status.icon
+            const successRate = campaign.sentCount > 0
+              ? Math.round((campaign.deliveredCount / campaign.sentCount) * 100)
+              : 0
+
+            return (
+              <motion.div
+                key={campaign.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ delay: i * 0.05 }}
+                layout
+              >
+                <Card
+                  variant="default"
+                  interactive
+                  className="p-6 group"
+                >
+                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                    {/* Left: Campaign Info */}
+                    <div className="flex items-start gap-4 flex-1">
+                      <div className={cn(
+                        'h-12 w-12 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110',
+                        type.color
+                      )}>
+                        <Send className="h-6 w-6" />
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="font-semibold group-hover:text-primary transition-colors">
+                            {campaign.name}
+                          </h3>
+                          <Badge variant="secondary" size="sm">{type.label}</Badge>
+                          <Badge
+                            variant={status.color}
+                            size="sm"
+                            icon={<StatusIcon className="h-3 w-3" />}
+                          >
+                            {status.label}
+                          </Badge>
+                        </div>
+
+                        <p className="text-sm text-muted-foreground line-clamp-1 mb-2">
+                          {campaign.content}
+                        </p>
+
+                        {campaign.scheduledAt && (
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            예약: {new Date(campaign.scheduledAt).toLocaleString('ko-KR')}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Right: Stats & Actions */}
+                    <div className="flex flex-wrap items-center gap-6 lg:gap-8">
+                      {/* Stats */}
+                      <div className="flex gap-6">
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground mb-0.5">발송</p>
+                          <p className="font-semibold tabular-nums">{campaign.sentCount.toLocaleString()}</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground mb-0.5">수신</p>
+                          <p className="font-semibold tabular-nums">{campaign.deliveredCount.toLocaleString()}</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground mb-0.5">클릭</p>
+                          <p className="font-semibold tabular-nums">{campaign.clickCount.toLocaleString()}</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="text-xs text-muted-foreground mb-0.5">성공률</p>
+                          <p className={cn(
+                            'font-semibold tabular-nums',
+                            successRate >= 95 ? 'text-mint-600' : successRate >= 80 ? 'text-amber-600' : 'text-rose-600'
+                          )}>
+                            {successRate}%
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon-sm" aria-label="상세보기">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon-sm" aria-label="복제">
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon-sm" aria-label="삭제" className="hover:text-rose-600">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <p className="line-clamp-2 text-sm text-muted-foreground">{campaign.content}</p>
-                  {campaign.scheduledAt && (
-                    <p className="text-sm text-muted-foreground">
-                      <Clock className="mr-1 inline h-3 w-3" />
-                      예약: {formatDateTime(campaign.scheduledAt)}
-                    </p>
+
+                  {/* Progress bar for sending campaigns */}
+                  {campaign.status === 'SENDING' && (
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                        <span>발송 진행률</span>
+                        <span>{Math.round((campaign.sentCount / campaign.totalRecipients) * 100)}%</span>
+                      </div>
+                      <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
+                        <motion.div
+                          className="h-full bg-gradient-to-r from-pingly-500 to-violet-500 rounded-full"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(campaign.sentCount / campaign.totalRecipients) * 100}%` }}
+                          transition={{ duration: 0.8, ease: 'easeOut' }}
+                        />
+                      </div>
+                    </div>
                   )}
-                </div>
+                </Card>
+              </motion.div>
+            )
+          })}
+        </AnimatePresence>
+      </motion.div>
 
-                <div className="flex flex-wrap items-center gap-6">
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">발송</p>
-                    <p className="font-semibold">{campaign.sentCount.toLocaleString()}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">수신</p>
-                    <p className="font-semibold">{campaign.deliveredCount.toLocaleString()}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">클릭</p>
-                    <p className="font-semibold">{campaign.clickCount.toLocaleString()}</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-sm text-muted-foreground">성공률</p>
-                    <p className="font-semibold">
-                      {campaign.sentCount > 0
-                        ? Math.round((campaign.deliveredCount / campaign.sentCount) * 100)
-                        : 0}
-                      %
-                    </p>
-                  </div>
-
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" title="상세보기">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" title="복제">
-                      <Copy className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" title="삭제">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
+      {/* Empty State */}
       {filteredCampaigns.length === 0 && (
-        <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Send className="h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 font-semibold">캠페인이 없습니다</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              새 캠페인을 생성하여 메시지를 발송해보세요
-            </p>
-            <Link href="/dashboard/campaigns/new" className="mt-4">
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                새 캠페인 만들기
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <motion.div variants={fadeInUp}>
+          <Card className="p-8">
+            <EmptyState
+              preset="campaigns"
+              action={{
+                label: '새 캠페인 만들기',
+                onClick: () => window.location.href = '/dashboard/campaigns/new',
+              }}
+            />
+          </Card>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   )
 }
