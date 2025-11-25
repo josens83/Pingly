@@ -1,24 +1,34 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { motion } from 'framer-motion'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Button,
+  Badge,
+  MetricCard,
+  toast,
+} from '@/components/primitives'
 import {
   CreditCard,
   Check,
   Zap,
-  Users,
-  BarChart3,
-  Shield,
-  ArrowRight,
   History,
   Download,
   Plus,
   Crown,
+  Sparkles,
+  TrendingUp,
+  ArrowRight,
+  Calendar,
+  Gift,
 } from 'lucide-react'
-import { formatCurrency, formatDate } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
+// Mock data
 const currentPlan = {
   name: 'Professional',
   price: 99000,
@@ -85,127 +95,227 @@ const transactions = [
   { id: '4', type: '구독 결제', amount: 99000, credits: 5000, date: '2024-10-15', status: 'COMPLETED' },
 ]
 
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('ko-KR', {
+    style: 'currency',
+    currency: 'KRW',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+type TabId = 'plan' | 'credits' | 'history'
+
+const tabs = [
+  { id: 'plan' as TabId, label: '요금제', icon: Crown },
+  { id: 'credits' as TabId, label: '크레딧 충전', icon: Zap },
+  { id: 'history' as TabId, label: '결제 내역', icon: History },
+]
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, delay: i * 0.1 },
+  }),
+}
+
 export default function BillingPage() {
-  const [activeTab, setActiveTab] = useState<'plan' | 'credits' | 'history'>('plan')
+  const [activeTab, setActiveTab] = useState<TabId>('plan')
 
   const creditUsagePercent = (currentPlan.usedCredits / currentPlan.credits) * 100
+  const remainingCredits = currentPlan.credits - currentPlan.usedCredits
+
+  const handlePurchaseCredits = (pkg: typeof creditPackages[0]) => {
+    toast.success(`${pkg.credits.toLocaleString()} 크레딧 구매를 진행합니다`)
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold">요금제 및 결제</h1>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold tracking-tight">요금제 및 결제</h1>
         <p className="text-muted-foreground">구독 및 크레딧을 관리하세요</p>
       </div>
 
-      {/* Current Status */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">현재 요금제</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-yellow-500" />
-              <span className="text-2xl font-bold">{currentPlan.name}</span>
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">
-              다음 결제일: {formatDate(currentPlan.periodEnd)}
-            </p>
-          </CardContent>
-        </Card>
+      {/* Current Status Cards */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-pingly-100 to-transparent rounded-bl-full" />
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
+                <Crown className="h-4 w-4" />
+                현재 요금제
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold">{currentPlan.name}</span>
+                <Badge variant="gradient" className="ml-2">활성</Badge>
+              </div>
+              <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                다음 결제일: {formatDate(currentPlan.periodEnd)}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">크레딧 잔액</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {(currentPlan.credits - currentPlan.usedCredits).toLocaleString()}
-              <span className="text-sm font-normal text-muted-foreground"> / {currentPlan.credits.toLocaleString()}</span>
-            </div>
-            <div className="mt-2 h-2 rounded-full bg-muted">
-              <div
-                className={`h-full rounded-full ${creditUsagePercent > 80 ? 'bg-red-500' : 'bg-primary'}`}
-                style={{ width: `${creditUsagePercent}%` }}
-              />
-            </div>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-mint-100 to-transparent rounded-bl-full" />
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
+                <Zap className="h-4 w-4" />
+                크레딧 잔액
+              </div>
+              <div className="text-2xl font-bold">
+                {remainingCredits.toLocaleString()}
+                <span className="text-sm font-normal text-muted-foreground ml-1">
+                  / {currentPlan.credits.toLocaleString()}
+                </span>
+              </div>
+              <div className="mt-3 h-2 rounded-full bg-muted overflow-hidden">
+                <motion.div
+                  className={cn(
+                    'h-full rounded-full',
+                    creditUsagePercent > 80
+                      ? 'bg-gradient-to-r from-rose-500 to-rose-600'
+                      : 'bg-gradient-to-r from-pingly-500 to-violet-500'
+                  )}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${creditUsagePercent}%` }}
+                  transition={{ duration: 0.8, ease: 'easeOut' }}
+                />
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {creditUsagePercent.toFixed(0)}% 사용됨
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">이번 달 지출</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(169000)}</div>
-            <p className="mt-1 text-sm text-muted-foreground">구독 + 추가 크레딧</p>
-          </CardContent>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <Card className="relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-violet-100 to-transparent rounded-bl-full" />
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
+                <CreditCard className="h-4 w-4" />
+                이번 달 지출
+              </div>
+              <div className="text-2xl font-bold">{formatCurrency(169000)}</div>
+              <div className="flex items-center gap-1 mt-2 text-sm text-mint-600">
+                <TrendingUp className="h-4 w-4" />
+                <span>지난달 대비 12% 절감</span>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 border-b">
-        {[
-          { id: 'plan', label: '요금제', icon: Crown },
-          { id: 'credits', label: '크레딧 충전', icon: Zap },
-          { id: 'history', label: '결제 내역', icon: History },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id as typeof activeTab)}
-            className={`flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === tab.id
-                ? 'border-primary text-primary'
-                : 'border-transparent text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <tab.icon className="h-4 w-4" />
-            {tab.label}
-          </button>
-        ))}
+      <div className="flex gap-1 border-b">
+        {tabs.map((tab) => {
+          const isActive = activeTab === tab.id
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                'flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all border-b-2 -mb-px',
+                isActive
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <tab.icon className="h-4 w-4" />
+              {tab.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Plan Selection */}
       {activeTab === 'plan' && (
         <div className="grid gap-6 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <Card
-              key={plan.id}
-              className={`relative ${plan.popular ? 'border-primary shadow-lg' : ''}`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">
-                  인기
-                </div>
-              )}
-              <CardHeader>
-                <CardTitle>{plan.name}</CardTitle>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold">{formatCurrency(plan.price)}</span>
-                  <span className="text-muted-foreground">/월</span>
-                </div>
-                <CardDescription>월 {plan.credits.toLocaleString()} 크레딧 포함</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  className="mt-6 w-full"
-                  variant={currentPlan.name === plan.name ? 'outline' : plan.popular ? 'default' : 'outline'}
-                  disabled={currentPlan.name === plan.name}
+          {plans.map((plan, i) => {
+            const isCurrentPlan = currentPlan.name === plan.name
+            return (
+              <motion.div
+                key={plan.id}
+                custom={i}
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <Card
+                  className={cn(
+                    'relative h-full transition-all hover:shadow-lg',
+                    plan.popular && 'border-primary shadow-primary/20 shadow-lg',
+                    isCurrentPlan && 'ring-2 ring-primary'
+                  )}
                 >
-                  {currentPlan.name === plan.name ? '현재 플랜' : '변경하기'}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <Badge variant="gradient" className="shadow-lg">
+                        <Sparkles className="h-3 w-3 mr-1" />
+                        인기
+                      </Badge>
+                    </div>
+                  )}
+                  <CardHeader className="pb-4">
+                    <CardTitle className="text-xl">{plan.name}</CardTitle>
+                    <div className="mt-3">
+                      <span className="text-4xl font-bold">{formatCurrency(plan.price)}</span>
+                      <span className="text-muted-foreground">/월</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      월 {plan.credits.toLocaleString()} 크레딧 포함
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <ul className="space-y-3">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-3 text-sm">
+                          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-mint-100">
+                            <Check className="h-3 w-3 text-mint-600" />
+                          </div>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      className="w-full"
+                      variant={isCurrentPlan ? 'outline' : plan.popular ? 'default' : 'outline'}
+                      disabled={isCurrentPlan}
+                      rightIcon={!isCurrentPlan && <ArrowRight className="h-4 w-4" />}
+                    >
+                      {isCurrentPlan ? '현재 플랜' : '변경하기'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )
+          })}
         </div>
       )}
 
@@ -215,37 +325,55 @@ export default function BillingPage() {
           <Card>
             <CardHeader>
               <CardTitle>크레딧 패키지</CardTitle>
-              <CardDescription>필요에 맞는 크레딧 패키지를 선택하세요</CardDescription>
+              <p className="text-sm text-muted-foreground">
+                필요에 맞는 크레딧 패키지를 선택하세요
+              </p>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {creditPackages.map((pkg) => (
-                  <div
+                {creditPackages.map((pkg, i) => (
+                  <motion.div
                     key={pkg.id}
-                    className={`relative rounded-lg border p-4 transition-shadow hover:shadow-md ${
-                      pkg.popular ? 'border-primary' : ''
-                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: i * 0.1 }}
+                    className={cn(
+                      'relative rounded-xl border p-5 transition-all hover:shadow-md cursor-pointer',
+                      pkg.popular && 'border-primary bg-gradient-to-b from-pingly-50/50 to-transparent'
+                    )}
+                    onClick={() => handlePurchaseCredits(pkg)}
                   >
                     {pkg.popular && (
-                      <Badge className="absolute -top-2 right-2 bg-primary">인기</Badge>
+                      <Badge className="absolute -top-2 right-3" variant="gradient">
+                        인기
+                      </Badge>
                     )}
-                    <div className="text-center">
-                      <p className="text-2xl font-bold">{pkg.credits.toLocaleString()}</p>
+                    <div className="text-center space-y-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <Zap className="h-5 w-5 text-pingly-500" />
+                        <span className="text-3xl font-bold">{pkg.credits.toLocaleString()}</span>
+                      </div>
                       <p className="text-sm text-muted-foreground">크레딧</p>
                       {pkg.bonus > 0 && (
-                        <Badge variant="success" className="mt-1">
+                        <Badge variant="success">
+                          <Gift className="h-3 w-3 mr-1" />
                           +{pkg.bonus.toLocaleString()} 보너스
                         </Badge>
                       )}
-                      <p className="mt-4 text-xl font-bold">{formatCurrency(pkg.price)}</p>
-                      <p className="text-xs text-muted-foreground">
-                        크레딧당 {formatCurrency(pkg.pricePerCredit)}
-                      </p>
-                      <Button className="mt-4 w-full" variant={pkg.popular ? 'default' : 'outline'}>
+                      <div className="pt-3">
+                        <p className="text-2xl font-bold">{formatCurrency(pkg.price)}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          크레딧당 {formatCurrency(pkg.pricePerCredit)}
+                        </p>
+                      </div>
+                      <Button
+                        className="w-full mt-3"
+                        variant={pkg.popular ? 'default' : 'outline'}
+                      >
                         구매하기
                       </Button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </CardContent>
@@ -259,38 +387,28 @@ export default function BillingPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-muted-foreground">
-                      <th className="pb-2 font-medium">메시지 유형</th>
-                      <th className="pb-2 font-medium">크레딧</th>
-                      <th className="pb-2 font-medium">실제 비용 (Professional 기준)</th>
+                    <tr className="border-b">
+                      <th className="pb-3 text-left font-semibold">메시지 유형</th>
+                      <th className="pb-3 text-left font-semibold">크레딧</th>
+                      <th className="pb-3 text-left font-semibold">실제 비용 (Professional 기준)</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="py-2">SMS (단문)</td>
-                      <td className="py-2">1</td>
-                      <td className="py-2">약 14원</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-2">LMS (장문)</td>
-                      <td className="py-2">3</td>
-                      <td className="py-2">약 42원</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-2">MMS (멀티미디어)</td>
-                      <td className="py-2">5</td>
-                      <td className="py-2">약 70원</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-2">카카오 알림톡</td>
-                      <td className="py-2">1</td>
-                      <td className="py-2">약 14원</td>
-                    </tr>
-                    <tr>
-                      <td className="py-2">카카오 친구톡</td>
-                      <td className="py-2">2</td>
-                      <td className="py-2">약 28원</td>
-                    </tr>
+                  <tbody className="divide-y">
+                    {[
+                      { type: 'SMS (단문)', credits: 1, cost: '약 14원' },
+                      { type: 'LMS (장문)', credits: 3, cost: '약 42원' },
+                      { type: 'MMS (멀티미디어)', credits: 5, cost: '약 70원' },
+                      { type: '카카오 알림톡', credits: 1, cost: '약 14원' },
+                      { type: '카카오 친구톡', credits: 2, cost: '약 28원' },
+                    ].map((row) => (
+                      <tr key={row.type}>
+                        <td className="py-3 font-medium">{row.type}</td>
+                        <td className="py-3">
+                          <Badge variant="secondary">{row.credits}</Badge>
+                        </td>
+                        <td className="py-3 text-muted-foreground">{row.cost}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -306,31 +424,38 @@ export default function BillingPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>결제 내역</CardTitle>
-                <CardDescription>최근 결제 및 크레딧 사용 내역</CardDescription>
+                <p className="text-sm text-muted-foreground mt-1">
+                  최근 결제 및 크레딧 사용 내역
+                </p>
               </div>
-              <Button variant="outline" size="sm">
-                <Download className="mr-2 h-4 w-4" />
+              <Button variant="outline" size="sm" leftIcon={<Download className="h-4 w-4" />}>
                 내보내기
               </Button>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {transactions.map((tx) => (
-                <div
+            <div className="space-y-3">
+              {transactions.map((tx, i) => (
+                <motion.div
                   key={tx.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                  className="flex items-center justify-between rounded-xl border bg-card p-4 hover:shadow-sm transition-shadow"
                 >
                   <div className="flex items-center gap-4">
                     <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full ${
-                        tx.credits > 0 ? 'bg-green-100' : 'bg-gray-100'
-                      }`}
+                      className={cn(
+                        'flex h-10 w-10 items-center justify-center rounded-full',
+                        tx.credits > 0
+                          ? 'bg-gradient-to-br from-mint-100 to-mint-200'
+                          : 'bg-muted'
+                      )}
                     >
                       {tx.credits > 0 ? (
-                        <Plus className="h-5 w-5 text-green-600" />
+                        <Plus className="h-5 w-5 text-mint-600" />
                       ) : (
-                        <CreditCard className="h-5 w-5 text-gray-600" />
+                        <CreditCard className="h-5 w-5 text-muted-foreground" />
                       )}
                     </div>
                     <div>
@@ -340,18 +465,23 @@ export default function BillingPage() {
                   </div>
                   <div className="text-right">
                     {tx.amount > 0 && (
-                      <p className="font-medium">{formatCurrency(tx.amount)}</p>
+                      <p className="font-semibold">{formatCurrency(tx.amount)}</p>
                     )}
                     <p
-                      className={`text-sm ${
-                        tx.credits > 0 ? 'text-green-600' : 'text-muted-foreground'
-                      }`}
+                      className={cn(
+                        'text-sm font-medium',
+                        tx.credits > 0 ? 'text-mint-600' : 'text-muted-foreground'
+                      )}
                     >
                       {tx.credits > 0 ? '+' : ''}{tx.credits.toLocaleString()} 크레딧
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <Button variant="ghost">더 보기</Button>
             </div>
           </CardContent>
         </Card>
