@@ -81,3 +81,7 @@ export type { AvatarProps, AvatarFallbackProps } from './Avatar'
 // Tooltip
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, SimpleTooltip } from './Tooltip'
 export type { TooltipContentProps } from './Tooltip'
+
+// Toast
+export { toast, useToast, ToastProvider, Toaster } from './toast'
+export type { Toast, ToastType } from './toast'
