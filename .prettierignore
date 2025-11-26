@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+out
+build
+dist
+coverage
+
+# Cache
+.cache
+.turbo
+
+# Generated files
+*.generated.*
+prisma/client
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env*
+
+# IDE
+.idea
+.vscode
+
+# Test outputs
+playwright-report
+test-results

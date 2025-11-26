@@ -1,0 +1,149 @@
+# 🎯 PR Quality Gates
+# Enforces elite development standards
+
+name: PR Quality Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # ============================================
+  # 📏 PR Size Check (Elite: < 100 lines)
+  # ============================================
+  pr-size:
+    name: 📏 PR Size Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📏 Check PR size
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            let additions = 0;
+            let deletions = 0;
+
+            for (const file of files) {
+              // Ignore lock files and auto-generated files
+              if (file.filename.includes('lock') ||
+                  file.filename.includes('.generated') ||
+                  file.filename.endsWith('.json') && file.filename.includes('package')) {
+                continue;
+              }
+              additions += file.additions;
+              deletions += file.deletions;
+            }
+
+            const totalChanges = additions + deletions;
+            const prNumber = context.payload.pull_request.number;
+
+            let status = '✅';
+            let message = '';
+
+            if (totalChanges <= 100) {
+              status = '🎯';
+              message = `Elite PR! Only ${totalChanges} lines changed.`;
+            } else if (totalChanges <= 200) {
+              status = '✅';
+              message = `Good PR size: ${totalChanges} lines changed.`;
+            } else if (totalChanges <= 400) {
+              status = '⚠️';
+              message = `Large PR: ${totalChanges} lines. Consider splitting.`;
+            } else {
+              status = '🚨';
+              message = `Very large PR: ${totalChanges} lines. Please split into smaller PRs.`;
+            }
+
+            const body = `## ${status} PR Size Analysis
+
+            | Metric | Value |
+            |--------|-------|
+            | Additions | +${additions} |
+            | Deletions | -${deletions} |
+            | **Total** | **${totalChanges}** |
+
+            ${message}
+
+            ---
+            <details>
+            <summary>📊 Elite Standards</summary>
+
+            - 🎯 **Elite**: < 100 lines
+            - ✅ **Good**: 100-200 lines
+            - ⚠️ **Large**: 200-400 lines
+            - 🚨 **Too Large**: > 400 lines
+
+            *Small PRs are reviewed faster, have fewer bugs, and are easier to rollback.*
+            </details>`;
+
+            // Find existing comment or create new one
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+            });
+
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('PR Size Analysis')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: body,
+              });
+            }
+
+  # ============================================
+  # 📝 Conventional Commits Check
+  # ============================================
+  conventional-commits:
+    name: 📝 Commit Convention
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📝 Check commit messages
+        uses: wagoid/commitlint-github-action@v5
+        continue-on-error: true
+
+  # ============================================
+  # 🏷️ Label PR by type
+  # ============================================
+  labeler:
+    name: 🏷️ Auto Label
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: 🏷️ Label PR
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
