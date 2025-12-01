@@ -1,0 +1,140 @@
+{
+  "app": {
+    "name": "Pingly",
+    "tagline": "Smart Message Marketing Platform"
+  },
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "messages": "Messages",
+    "contacts": "Contacts",
+    "campaigns": "Campaigns",
+    "templates": "Templates",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "send": "Send",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "retry": "Retry",
+    "close": "Close",
+    "view": "View",
+    "copy": "Copy",
+    "paste": "Paste"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "sending": "Sending...",
+    "success": "Success",
+    "error": "Error",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "active": "Active",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "time": {
+    "now": "Just now",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "thisWeek": "This week",
+    "lastWeek": "Last week",
+    "thisMonth": "This month",
+    "lastMonth": "Last month"
+  },
+  "messages": {
+    "count": {
+      "zero": "No messages",
+      "one": "1 message",
+      "other": "{{count}} messages"
+    },
+    "sent": "{{count}} messages sent",
+    "received": "{{count}} messages received"
+  },
+  "contacts": {
+    "count": {
+      "zero": "No contacts",
+      "one": "1 contact",
+      "other": "{{count}} contacts"
+    },
+    "addNew": "Add new contact",
+    "import": "Import contacts"
+  },
+  "campaigns": {
+    "count": {
+      "zero": "No campaigns",
+      "one": "1 campaign",
+      "other": "{{count}} campaigns"
+    },
+    "createNew": "Create new campaign",
+    "status": {
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "running": "Running",
+      "paused": "Paused",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "email": "Please enter a valid email address",
+    "phone": "Please enter a valid phone number",
+    "minLength": "{{field}} must be at least {{min}} characters",
+    "maxLength": "{{field}} cannot exceed {{max}} characters",
+    "pattern": "Please enter a valid format"
+  },
+  "errors": {
+    "generic": "An error occurred. Please try again.",
+    "network": "Please check your network connection.",
+    "notFound": "The requested item was not found.",
+    "unauthorized": "Please log in to continue.",
+    "forbidden": "You do not have permission to access this.",
+    "serverError": "A server error occurred."
+  },
+  "confirm": {
+    "delete": "Are you sure you want to delete this?",
+    "cancel": "Do you want to cancel your changes?",
+    "unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+  },
+  "empty": {
+    "noData": "No data available",
+    "noResults": "No results found",
+    "noMessages": "No messages",
+    "noContacts": "No contacts",
+    "noCampaigns": "No campaigns"
+  },
+  "pagination": {
+    "page": "Page {{current}} of {{total}}",
+    "showing": "Showing {{from}}-{{to}} of {{total}}",
+    "first": "First",
+    "last": "Last",
+    "perPage": "{{count}} per page"
+  },
+  "accessibility": {
+    "skipToMain": "Skip to main content",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "expandMenu": "Expand menu",
+    "loading": "Loading",
+    "newNotification": "New notification"
+  }
+}
