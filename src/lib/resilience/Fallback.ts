@@ -139,7 +139,7 @@ export async function withFeatureFlag<T>(
  * Stale-while-revalidate pattern
  */
 export function staleWhileRevalidate<T>(
-  key: string,
+  _key: string,
   fetchFn: () => Promise<T>,
   options: {
     staleTime: number

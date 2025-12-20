@@ -26,7 +26,6 @@ import {
   TablePagination,
   TableEmpty,
 } from '@/components/primitives'
-import { EmptyState } from '@/components/patterns'
 import {
   Plus,
   Upload,
@@ -36,15 +35,10 @@ import {
   Users,
   UserPlus,
   Trash2,
-  Edit,
   Check,
-  X,
   Mail,
   Phone,
   Building,
-  Filter,
-  ChevronDown,
-  Star,
   MessageSquare,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -328,7 +322,7 @@ export default function ContactsPage() {
                     }
                   />
                 ) : (
-                  filteredContacts.map((contact, i) => (
+                  filteredContacts.map((contact) => (
                     <TableRow
                       key={contact.id}
                       isSelected={selectedContacts.includes(contact.id)}

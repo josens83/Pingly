@@ -113,7 +113,7 @@ export function calculateCreditCost(type: string, contentLength: number): number
 
   // SMS는 90바이트 초과시 LMS로 전환
   if (type === 'SMS' && contentLength > 90) {
-    cost = baseCosts['LMS']
+    cost = baseCosts['LMS'] ?? 3
   }
 
   return cost

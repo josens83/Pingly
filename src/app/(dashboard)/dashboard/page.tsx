@@ -18,7 +18,6 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle,
-  AlertCircle,
   Activity,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -410,7 +409,7 @@ export default function DashboardPage() {
               { name: '블랙프라이데이 안내', time: '오늘 오후 2:00', recipients: 2500 },
               { name: '신제품 출시 알림', time: '내일 오전 10:00', recipients: 1800 },
               { name: '월간 뉴스레터', time: '11/28 오전 9:00', recipients: 3200 },
-            ].map((item, i) => (
+            ].map((item) => (
               <div
                 key={item.name}
                 className="flex items-center gap-4 p-3 rounded-lg bg-muted/50"

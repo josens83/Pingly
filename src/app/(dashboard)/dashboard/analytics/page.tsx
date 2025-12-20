@@ -14,29 +14,21 @@ import {
   SelectItem,
 } from '@/components/primitives'
 import {
-  BarChart3,
-  TrendingUp,
-  TrendingDown,
   Send,
   CheckCircle,
   XCircle,
   MousePointer,
-  Users,
   Download,
   Calendar,
   ArrowUpRight,
   ArrowDownRight,
   Sparkles,
-  Target,
-  Zap,
 } from 'lucide-react'
 import {
   AreaChart,
   Area,
   BarChart,
   Bar,
-  LineChart,
-  Line,
   PieChart,
   Pie,
   Cell,
@@ -44,7 +36,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from 'recharts'
 import { cn } from '@/lib/utils'

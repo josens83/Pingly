@@ -114,7 +114,7 @@ export function useIntersectionObserver(
     if (typeof window === 'undefined') return null
 
     return new IntersectionObserver(([entry]) => {
-      setEntry(entry)
+      setEntry(entry ?? null)
     }, options)
   }, [options.threshold, options.root, options.rootMargin])
 
@@ -148,7 +148,7 @@ export function useIdleCallback(callback: () => void, deps: unknown[] = []): voi
     if ('requestIdleCallback' in window) {
       id = requestIdleCallback(callback, { timeout: 2000 })
     } else {
-      id = window.setTimeout(callback, 100)
+      id = setTimeout(callback, 100) as unknown as number
     }
 
     return () => {

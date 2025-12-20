@@ -61,6 +61,7 @@ export function createEntityAdapter<T extends Entity>(options?: {
     return [...state.allIds].sort((a, b) => {
       const entityA = state.byId[a];
       const entityB = state.byId[b];
+      if (!entityA || !entityB) return 0;
       return sortComparer(entityA, entityB);
     });
   };
@@ -135,7 +136,10 @@ export function createEntityAdapter<T extends Entity>(options?: {
       return state;
     }
 
-    const updatedEntity = { ...state.byId[id], ...changes };
+    const existing = state.byId[id];
+    if (!existing) return state;
+
+    const updatedEntity = { ...existing, ...changes } as T;
 
     return {
       byId: { ...state.byId, [id]: updatedEntity },
@@ -197,7 +201,7 @@ export function createEntityAdapter<T extends Entity>(options?: {
   };
 
   const selectAll = (state: NormalizedEntity<T>): T[] => {
-    return state.allIds.map(id => state.byId[id]);
+    return state.allIds.map(id => state.byId[id]).filter((entity): entity is T => entity !== undefined);
   };
 
   const selectTotal = (state: NormalizedEntity<T>): number => {

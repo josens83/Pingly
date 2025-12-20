@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button, Card, Badge } from '@/components/primitives'
 import {
   MessageSquare,
@@ -415,7 +415,7 @@ export default function HomePage() {
                 description: '간편한 API로 기존 시스템과 쉽게 연동하세요. SDK도 제공됩니다.',
                 color: 'sky',
               },
-            ].map((feature, i) => (
+            ].map((feature) => (
               <motion.div key={feature.title} variants={fadeInUp}>
                 <Card
                   variant="feature"
@@ -514,7 +514,7 @@ export default function HomePage() {
                 ],
                 popular: false,
               },
-            ].map((plan, i) => (
+            ].map((plan) => (
               <motion.div key={plan.name} variants={fadeInUp}>
                 <Card
                   variant={plan.popular ? 'gradient' : 'default'}
@@ -620,12 +620,12 @@ export default function HomePage() {
                 role: '1인 창업가',
                 company: 'SaaS 스타트업',
               },
-            ].map((testimonial, i) => (
+            ].map((testimonial) => (
               <motion.div key={testimonial.name} variants={fadeInUp}>
                 <Card variant="elevated" className="p-6 h-full">
                   <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    {[...Array(5)].map((_, starIdx) => (
+                      <Star key={starIdx} className="h-4 w-4 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
                   <p className="text-muted-foreground leading-relaxed">

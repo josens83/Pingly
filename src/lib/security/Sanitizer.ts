@@ -55,9 +55,7 @@ export function sanitizeHtml(
 ): string {
   const {
     allowedTags = ['b', 'i', 'em', 'strong', 'a', 'p', 'br'],
-    allowedAttributes = {
-      a: ['href', 'title', 'target'],
-    },
+    // allowedAttributes reserved for future DOMPurify integration
   } = options
 
   // Simple HTML sanitizer (for production, use DOMPurify)

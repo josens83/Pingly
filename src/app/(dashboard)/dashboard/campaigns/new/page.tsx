@@ -22,13 +22,10 @@ import {
   Image,
   AlertCircle,
   Check,
-  Zap,
   Target,
   Calendar,
   CreditCard,
   Sparkles,
-  ChevronRight,
-  Info,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -133,17 +130,6 @@ export default function NewCampaignPage() {
     addOptOut: true,
   })
 
-  // Calculate byte length
-  const getByteLength = (str: string) => {
-    let byteLength = 0
-    for (let i = 0; i < str.length; i++) {
-      const charCode = str.charCodeAt(i)
-      byteLength += charCode > 127 ? 2 : 1
-    }
-    return byteLength
-  }
-
-  const contentLength = getByteLength(formData.content)
   const messageTypeConfig = messageTypes.find(t => t.value === formData.type)!
   const recipientCount = formData.targetGroups.reduce((acc, groupId) => {
     const group = contactGroups.find(g => g.value === groupId)

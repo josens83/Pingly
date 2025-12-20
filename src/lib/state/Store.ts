@@ -28,7 +28,7 @@ export interface Reducer<S, A extends Action = Action> {
   (state: S, action: A): S;
 }
 
-export interface Middleware<S = unknown> {
+export interface Middleware<S extends Record<string, unknown> = Record<string, unknown>> {
   (store: Store<S>): (next: Dispatch) => (action: Action) => unknown;
 }
 
@@ -164,15 +164,12 @@ export class Store<S extends Record<string, unknown>> {
     listener: (value: R, prevValue: R) => void,
     equalityFn: (a: R, b: R) => boolean = Object.is
   ): Unsubscribe {
-    let currentValue = selector(this.state);
-
     const wrappedListener: Listener<S> = (state, prevState) => {
       const nextValue = selector(state);
       const prevValue = selector(prevState);
 
       if (!equalityFn(nextValue, prevValue)) {
         listener(nextValue, prevValue);
-        currentValue = nextValue;
       }
     };
 
@@ -208,7 +205,7 @@ export class Store<S extends Record<string, unknown>> {
 
     const prevState = this.state;
     this.historyIndex = index;
-    this.state = this.history[index].state;
+    this.state = this.history[index]?.state ?? this.state;
 
     this.notifySubscribers(prevState);
   }
@@ -271,7 +268,10 @@ export class Store<S extends Record<string, unknown>> {
     // Apply middleware
     let dispatch = coreDispatch;
     for (let i = this.middleware.length - 1; i >= 0; i--) {
-      dispatch = this.middleware[i](this)(dispatch);
+      const mw = this.middleware[i];
+      if (mw) {
+        dispatch = mw(this)(dispatch);
+      }
     }
 
     return dispatch;

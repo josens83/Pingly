@@ -116,7 +116,7 @@ class ConnectionManager {
     this.stopHealthCheck()
 
     this.healthCheckInterval = setInterval(async () => {
-      for (const [name, conn] of this.connections) {
+      for (const [name] of this.connections) {
         try {
           const start = performance.now()
           const isHealthy = await checkFn(name)

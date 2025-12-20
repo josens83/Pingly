@@ -1,0 +1,100 @@
+# Project: Pingly - SMS & Messenger Marketing Platform
+
+## Tech Stack
+- Framework: Next.js 14 (App Router)
+- UI Library: shadcn/ui
+- Styling: Tailwind CSS
+- Language: TypeScript (strict mode)
+- Database: PostgreSQL + Prisma ORM
+- State: Zustand + TanStack Query
+
+## Design System Rules
+
+### Component Usage (MANDATORY)
+- Buttons: ALWAYS use `@/components/ui/button`
+- Cards: ALWAYS use `@/components/ui/card`
+- Forms: ALWAYS use `@/components/ui/form` + react-hook-form
+- Modals: ALWAYS use `@/components/ui/dialog`
+- Inputs: ALWAYS use `@/components/ui/input`
+- Selects: ALWAYS use `@/components/ui/select`
+- Loading: ALWAYS use `@/components/ui/skeleton`
+- Empty State: ALWAYS use `@/components/ui/states/empty-state`
+- Error State: ALWAYS use `@/components/ui/states/error-state`
+
+### Color Rules (NEVER hardcode)
+- Background: `bg-background` (NOT `bg-white`)
+- Text: `text-foreground` (NOT `text-gray-900`)
+- Primary: `bg-primary text-primary-foreground` (NOT `bg-blue-500`)
+- Muted: `text-muted-foreground` (NOT `text-gray-500`)
+- Destructive: `bg-destructive` (NOT `bg-red-500`)
+
+### Spacing Standards
+- Component gap: `space-y-4` or `gap-4`
+- Section padding: `py-8` or `py-16`
+- Card padding: `p-6`
+- Container: `max-w-7xl mx-auto px-4 md:px-6 lg:px-8`
+
+### Typography
+- h1: `text-2xl font-bold` → `md:text-3xl` → `lg:text-4xl`
+- h2: `text-xl font-semibold` → `md:text-2xl`
+- body: `text-base text-foreground`
+- caption: `text-sm text-muted-foreground`
+
+## Responsive Design (MOBILE-FIRST MANDATORY)
+
+### Breakpoint Order
+Always write in this order: base → sm → md → lg → xl
+```tsx
+// CORRECT
+className="w-full md:w-1/2 lg:w-1/3"
+className="flex-col md:flex-row"
+className="p-4 md:p-6 lg:p-8"
+
+// WRONG (desktop-first)
+className="w-1/3 lg:w-1/2 md:w-full"
+```
+
+### Allowed Breakpoints
+- default: < 640px (mobile)
+- md: 768px+ (tablet)
+- lg: 1024px+ (desktop)
+- Avoid sm, xl, 2xl unless necessary
+
+### Touch Targets
+- Minimum 44x44px: `min-h-11 min-w-11`
+- Icon buttons: `size="icon"` with proper aria-label
+
+## UI State Implementation (REQUIRED)
+
+### Every data component MUST have:
+1. Loading: Skeleton UI (NOT Spinner)
+2. Success: Actual content
+3. Empty: EmptyState component with CTA
+4. Error: ErrorState component with retry
+
+### Pattern:
+```tsx
+if (isLoading) return <Skeleton />
+if (isError) return <ErrorState onRetry={refetch} message={error.message} />
+if (!data?.length) return <EmptyState icon={Icon} title="..." action={{...}} />
+return <Content data={data} />
+```
+
+## Accessibility (REQUIRED)
+
+- Images: meaningful `alt` (NOT "image" or empty)
+- Forms: `<label>` connected to inputs
+- Buttons: clear text OR `aria-label`
+- Focus: `focus-visible:ring-2 focus-visible:ring-ring`
+- Contrast: 4.5:1 minimum
+
+## PROHIBITED
+
+- Inline styles (`style={{}}`)
+- `!important`
+- Hardcoded colors (`bg-white`, `text-gray-900`)
+- Creating components that exist in ui/
+- Desktop-first breakpoints
+- Missing loading/error/empty states
+- Images without alt text
+- Buttons without accessible labels

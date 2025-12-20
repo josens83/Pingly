@@ -14,7 +14,6 @@ import {
   Users,
   Building,
   MessageSquare,
-  CreditCard,
   BarChart3,
   Settings,
   AlertTriangle,
@@ -130,7 +129,7 @@ export default async function AdminPage() {
           {/* Stats */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => {
-              const colors = getColorClasses(stat.color)
+              const colors = getColorClasses(stat.color) ?? { bg: 'bg-pingly-100', text: 'text-pingly-600', icon: 'text-pingly-500' }
               return (
                 <Card key={stat.name} className="relative overflow-hidden">
                   <div className={cn('absolute top-0 right-0 w-24 h-24 rounded-bl-full opacity-50', colors.bg)} />

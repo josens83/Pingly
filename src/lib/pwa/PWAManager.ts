@@ -270,16 +270,16 @@ class PWAManager {
 
       const subscription = await this.serviceWorkerRegistration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(this.config.pushVapidKey)
+        applicationServerKey: this.urlBase64ToUint8Array(this.config.pushVapidKey) as BufferSource
       });
 
       const json = subscription.toJSON();
 
       return {
-        endpoint: json.endpoint!,
+        endpoint: json.endpoint ?? '',
         keys: {
-          p256dh: json.keys!.p256dh,
-          auth: json.keys!.auth
+          p256dh: json.keys?.p256dh ?? '',
+          auth: json.keys?.auth ?? ''
         }
       };
     } catch (error) {
