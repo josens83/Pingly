@@ -21,7 +21,7 @@ const NotificationSchema = z.object({
   targetUserIds: z.array(z.string()).optional(),
   roomId: z.string().optional(),
   broadcast: z.boolean().default(false),
-  data: z.record(z.unknown()).optional(),
+  data: z.record(z.string(), z.unknown()).optional(),
   priority: z.enum(['low', 'normal', 'high']).default('normal'),
   expiresIn: z.number().optional(), // seconds
 });
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid request', details: error.errors },
+        { error: 'Invalid request', details: error.issues },
         { status: 400 }
       );
     }

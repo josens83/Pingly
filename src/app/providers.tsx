@@ -93,13 +93,7 @@ function useEnterpriseInit() {
     analytics.page();
 
     // Initialize Web Vitals
-    initWebVitals((metric) => {
-      analytics.track('$web_vital', {
-        name: metric.name,
-        value: metric.value,
-        rating: metric.rating,
-      });
-    });
+    initWebVitals();
 
     // Initialize i18n
     i18n.initialize({
@@ -139,8 +133,9 @@ function useEnterpriseInit() {
     });
 
     // Setup WebSocket state listener
-    const unsubscribeWsState = wsClient.onEvent('stateChange', (event: { to: ConnectionState }) => {
-      setWsState(event.to);
+    const unsubscribeWsState = wsClient.onEvent('stateChange', (event: unknown) => {
+      const stateEvent = event as { to: ConnectionState };
+      setWsState(stateEvent.to);
     });
 
     // Initialize Feature Flags

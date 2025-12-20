@@ -25,8 +25,9 @@ export function useWebSocketConnection() {
   useEffect(() => {
     setState(wsClient.getState());
 
-    const unsubscribe = wsClient.onEvent('stateChange', (event: { to: ConnectionState }) => {
-      setState(event.to);
+    const unsubscribe = wsClient.onEvent('stateChange', (event: unknown) => {
+      const stateEvent = event as { to: ConnectionState };
+      setState(stateEvent.to);
     });
 
     // Update latency periodically
