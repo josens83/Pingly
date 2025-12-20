@@ -1,8 +1,4 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-# Run lint-staged for staged files
+echo "🔍 커밋 전 검증..."
 npx lint-staged
-
-# Run type check
-npm run type-check

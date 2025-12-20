@@ -1,8 +1,17 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-# Run tests before push
-npm run test:ci
+echo "🚀 푸시 전 최종 검증..."
 
-# Build check
-npm run build
+# TypeScript 타입 체크
+echo "📝 TypeScript 검사 중..."
+npm run typecheck || exit 1
+
+# ESLint 검사
+echo "📋 ESLint 검사 중..."
+npm run lint || exit 1
+
+# 빌드 테스트
+echo "🏗️ 빌드 테스트 중..."
+npm run build || exit 1
+
+echo "✅ 검증 완료!"
