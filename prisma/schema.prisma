@@ -1,12 +1,16 @@
 // Prisma Schema for Pingly - SMS & Messenger Marketing Platform
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
+  // JavaScript 엔진 사용 (바이너리 호환성 문제 해결, 번들 크기 감소)
+  engineType = "library"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // Connection Pooling용 직접 연결 (마이그레이션용)
+  directUrl = env("DIRECT_URL")
 }
 
 // ==================== Authentication Models ====================

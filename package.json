@@ -4,13 +4,15 @@
   "description": "SMS & Messenger Marketing Platform",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
+    "postinstall": "prisma generate",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -23,17 +25,32 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
+    "db:seed": "prisma db seed",
+    "db:validate": "prisma validate",
     "analyze": "ANALYZE=true next build",
+    "verify": "npm run typecheck && npm run lint && npm run build",
+    "verify:quick": "npm run typecheck && npm run lint",
     "prepare": "husky install"
   },
   "repository": {
     "type": "git",
     "url": "http://local_proxy@127.0.0.1:41212/git/josens83/Pingly"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "sms",
+    "marketing",
+    "messenger",
+    "campaign",
+    "nextjs"
+  ],
+  "author": "Pingly Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@next-auth/prisma-adapter": "^1.0.7",
@@ -50,9 +67,6 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@stripe/stripe-js": "^8.5.3",
     "@tanstack/react-query": "^5.90.10",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.22",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
@@ -64,6 +78,7 @@
     "next": "^14.2.33",
     "next-auth": "^4.24.13",
     "postcss": "^8.5.6",
+    "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.66.1",
@@ -72,7 +87,6 @@
     "stripe": "^20.0.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^3.4.18",
-    "typescript": "^5.9.3",
     "web-vitals": "^4.2.4",
     "zod": "^4.1.13",
     "zustand": "^5.0.8"
@@ -85,15 +99,20 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^16.0.4",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.31.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^15.2.10",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "prisma": "^5.22.0",
+    "typescript": "^5.0.0",
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "lint-staged": {
@@ -104,5 +123,8 @@
     "*.{json,css,md}": [
       "prettier --write"
     ]
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
