@@ -56,3 +56,30 @@ export {
 
 // Hooks
 export { usePerformanceMonitor, useDeferredValue, useThrottledValue } from './hooks'
+
+// Chapter 18 Utilities
+export {
+  useDelayedLoading,
+  useRenderTime,
+  useDebounce,
+  useThrottle,
+  useIntersectionObserver,
+  useIdleCallback,
+  usePrefetch,
+  useMemoryMonitor,
+  useLongTaskObserver,
+} from './utils'
+
+// Chapter 18 Prefetch Utilities
+export {
+  usePrefetchRoute,
+  usePrefetchQuery,
+  usePreloadImage,
+  preloadImages,
+  useGalleryPreload,
+  preconnect,
+  dnsPrefetch,
+  preloadScript,
+  usePreconnect,
+  useViewportPrefetch,
+} from './prefetch'
