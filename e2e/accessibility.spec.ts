@@ -4,6 +4,7 @@
  */
 
 import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
 
 test.describe('Accessibility', () => {
   test.describe('Keyboard Navigation', () => {
@@ -123,6 +124,76 @@ test.describe('Accessibility', () => {
 
       // Page should still function without animations
       await expect(page.getByRole('heading')).toBeVisible()
+    })
+  })
+
+  test.describe('Automated Accessibility (axe-core)', () => {
+    test('login page should have no critical accessibility violations', async ({
+      page,
+    }) => {
+      await page.goto('/login')
+
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      // Filter for critical and serious violations only
+      const criticalViolations = accessibilityScanResults.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious'
+      )
+
+      expect(criticalViolations).toEqual([])
+    })
+
+    test('register page should have no critical accessibility violations', async ({
+      page,
+    }) => {
+      await page.goto('/register')
+
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      const criticalViolations = accessibilityScanResults.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious'
+      )
+
+      expect(criticalViolations).toEqual([])
+    })
+
+    test('home page should have no critical accessibility violations', async ({
+      page,
+    }) => {
+      await page.goto('/')
+
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      const criticalViolations = accessibilityScanResults.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious'
+      )
+
+      expect(criticalViolations).toEqual([])
+    })
+
+    test('should report all violations for debugging', async ({ page }) => {
+      await page.goto('/login')
+
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze()
+
+      // Log all violations for debugging (won't fail the test)
+      if (accessibilityScanResults.violations.length > 0) {
+        console.log(
+          'Accessibility violations found:',
+          JSON.stringify(accessibilityScanResults.violations, null, 2)
+        )
+      }
+
+      // This test passes but logs violations for review
+      expect(true).toBe(true)
     })
   })
 })

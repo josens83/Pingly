@@ -64,6 +64,32 @@ module.exports = {
         // Security
         'is-on-https': 'off', // Local testing
         'uses-http2': 'off', // Local testing
+
+        // Accessibility specific audits (Chapter 17)
+        'color-contrast': 'error',
+        'document-title': 'error',
+        'html-has-lang': 'error',
+        'html-lang-valid': 'error',
+        'meta-viewport': 'error',
+        'image-alt': 'error',
+        'button-name': 'error',
+        'link-name': 'error',
+        'label': 'error',
+        'form-field-multiple-labels': 'warn',
+        'frame-title': 'error',
+        'heading-order': 'warn',
+        'bypass': 'warn',
+        'tabindex': 'warn',
+        'duplicate-id-aria': 'error',
+        'aria-allowed-attr': 'error',
+        'aria-hidden-body': 'error',
+        'aria-hidden-focus': 'error',
+        'aria-required-attr': 'error',
+        'aria-required-children': 'error',
+        'aria-required-parent': 'error',
+        'aria-roles': 'error',
+        'aria-valid-attr-value': 'error',
+        'aria-valid-attr': 'error',
       },
     },
     upload: {
