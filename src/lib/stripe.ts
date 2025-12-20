@@ -1,10 +1,13 @@
 import Stripe from 'stripe'
 
+// Use a dummy key for build time to prevent initialization errors
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder_for_build'
+
 if (!process.env.STRIPE_SECRET_KEY) {
-  console.warn('Warning: STRIPE_SECRET_KEY is not set')
+  console.warn('Warning: STRIPE_SECRET_KEY is not set. Using placeholder for build.')
 }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+export const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2024-12-18.acacia',
   typescript: true,
 })

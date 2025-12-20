@@ -1,0 +1,98 @@
+{
+  "title": "캠페인",
+  "subtitle": "SMS 및 메시지 캠페인을 관리하세요",
+  "list": {
+    "title": "캠페인 목록",
+    "empty": "캠페인이 없습니다.",
+    "emptyDescription": "첫 번째 캠페인을 만들어 고객에게 메시지를 보내세요.",
+    "createFirst": "첫 캠페인 만들기"
+  },
+  "create": {
+    "title": "새 캠페인",
+    "subtitle": "새로운 메시지 캠페인을 만드세요",
+    "steps": {
+      "details": "캠페인 정보",
+      "audience": "대상 선택",
+      "message": "메시지 작성",
+      "schedule": "발송 예약",
+      "review": "검토"
+    }
+  },
+  "form": {
+    "name": "캠페인 이름",
+    "namePlaceholder": "예: 여름 세일 알림",
+    "description": "설명",
+    "descriptionPlaceholder": "캠페인에 대한 간단한 설명",
+    "type": "캠페인 유형",
+    "types": {
+      "sms": "SMS",
+      "mms": "MMS",
+      "kakao": "카카오톡",
+      "push": "푸시 알림"
+    },
+    "audience": {
+      "title": "수신자 선택",
+      "all": "전체 연락처",
+      "segment": "세그먼트",
+      "tags": "태그",
+      "custom": "직접 선택",
+      "count": "선택된 수신자: {count}명"
+    },
+    "message": {
+      "title": "메시지 내용",
+      "placeholder": "메시지를 입력하세요...",
+      "characters": "{count}/160자",
+      "preview": "미리보기",
+      "personalization": "개인화",
+      "insertVariable": "변수 삽입",
+      "variables": {
+        "name": "이름",
+        "phone": "전화번호",
+        "email": "이메일"
+      }
+    },
+    "schedule": {
+      "title": "발송 시간",
+      "now": "즉시 발송",
+      "scheduled": "예약 발송",
+      "date": "날짜",
+      "time": "시간",
+      "timezone": "시간대"
+    }
+  },
+  "status": {
+    "draft": "초안",
+    "scheduled": "예약됨",
+    "sending": "발송 중",
+    "sent": "발송 완료",
+    "paused": "일시 중지",
+    "cancelled": "취소됨",
+    "failed": "실패"
+  },
+  "actions": {
+    "create": "캠페인 만들기",
+    "edit": "수정",
+    "duplicate": "복제",
+    "delete": "삭제",
+    "pause": "일시 중지",
+    "resume": "재개",
+    "cancel": "취소",
+    "sendNow": "지금 발송",
+    "schedule": "예약"
+  },
+  "stats": {
+    "sent": "발송",
+    "delivered": "전달",
+    "opened": "오픈",
+    "clicked": "클릭",
+    "converted": "전환",
+    "failed": "실패",
+    "unsubscribed": "수신거부"
+  },
+  "confirmDelete": {
+    "title": "캠페인 삭제",
+    "message": "'{name}' 캠페인을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "confirm": "삭제",
+    "cancel": "취소"
+  }
+}

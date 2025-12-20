@@ -1,0 +1,45 @@
+{
+  "title": "Dashboard",
+  "welcome": "Hello, {name}!",
+  "overview": {
+    "title": "Overview",
+    "totalCampaigns": "Total Campaigns",
+    "activeCampaigns": "Active Campaigns",
+    "totalContacts": "Total Contacts",
+    "messagesSent": "Messages Sent",
+    "deliveryRate": "Delivery Rate",
+    "openRate": "Open Rate",
+    "clickRate": "Click Rate",
+    "conversionRate": "Conversion Rate"
+  },
+  "recentActivity": {
+    "title": "Recent Activity",
+    "noActivity": "No recent activity.",
+    "campaignCreated": "Campaign '{name}' was created.",
+    "campaignSent": "Campaign '{name}' was sent.",
+    "contactAdded": "{count, plural, one {# contact} other {# contacts}} added.",
+    "contactImported": "{count, plural, one {# contact} other {# contacts}} imported."
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "newCampaign": "New Campaign",
+    "addContacts": "Add Contacts",
+    "viewAnalytics": "View Analytics",
+    "manageTemplates": "Manage Templates"
+  },
+  "charts": {
+    "messageVolume": "Message Volume",
+    "engagementTrend": "Engagement Trend",
+    "topCampaigns": "Top Campaigns",
+    "deviceBreakdown": "Device Breakdown",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "noNotifications": "No new notifications.",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all"
+  }
+}

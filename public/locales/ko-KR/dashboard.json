@@ -1,0 +1,45 @@
+{
+  "title": "대시보드",
+  "welcome": "안녕하세요, {name}님!",
+  "overview": {
+    "title": "개요",
+    "totalCampaigns": "전체 캠페인",
+    "activeCampaigns": "활성 캠페인",
+    "totalContacts": "전체 연락처",
+    "messagesSent": "발송된 메시지",
+    "deliveryRate": "전달률",
+    "openRate": "오픈율",
+    "clickRate": "클릭률",
+    "conversionRate": "전환율"
+  },
+  "recentActivity": {
+    "title": "최근 활동",
+    "noActivity": "최근 활동이 없습니다.",
+    "campaignCreated": "캠페인 '{name}'이(가) 생성되었습니다.",
+    "campaignSent": "캠페인 '{name}'이(가) 발송되었습니다.",
+    "contactAdded": "연락처 {count}개가 추가되었습니다.",
+    "contactImported": "연락처 {count}개가 가져와졌습니다."
+  },
+  "quickActions": {
+    "title": "빠른 작업",
+    "newCampaign": "새 캠페인",
+    "addContacts": "연락처 추가",
+    "viewAnalytics": "분석 보기",
+    "manageTemplates": "템플릿 관리"
+  },
+  "charts": {
+    "messageVolume": "메시지 발송량",
+    "engagementTrend": "참여도 추이",
+    "topCampaigns": "상위 캠페인",
+    "deviceBreakdown": "기기별 현황",
+    "daily": "일별",
+    "weekly": "주별",
+    "monthly": "월별"
+  },
+  "notifications": {
+    "title": "알림",
+    "noNotifications": "새 알림이 없습니다.",
+    "markAllRead": "모두 읽음으로 표시",
+    "viewAll": "전체 보기"
+  }
+}

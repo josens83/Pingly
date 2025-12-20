@@ -1,0 +1,98 @@
+{
+  "title": "Campaigns",
+  "subtitle": "Manage your SMS and message campaigns",
+  "list": {
+    "title": "Campaign List",
+    "empty": "No campaigns yet.",
+    "emptyDescription": "Create your first campaign to start messaging your customers.",
+    "createFirst": "Create First Campaign"
+  },
+  "create": {
+    "title": "New Campaign",
+    "subtitle": "Create a new message campaign",
+    "steps": {
+      "details": "Campaign Details",
+      "audience": "Select Audience",
+      "message": "Compose Message",
+      "schedule": "Schedule",
+      "review": "Review"
+    }
+  },
+  "form": {
+    "name": "Campaign Name",
+    "namePlaceholder": "e.g., Summer Sale Notification",
+    "description": "Description",
+    "descriptionPlaceholder": "Brief description of the campaign",
+    "type": "Campaign Type",
+    "types": {
+      "sms": "SMS",
+      "mms": "MMS",
+      "kakao": "KakaoTalk",
+      "push": "Push Notification"
+    },
+    "audience": {
+      "title": "Select Recipients",
+      "all": "All Contacts",
+      "segment": "Segment",
+      "tags": "Tags",
+      "custom": "Custom Selection",
+      "count": "Selected recipients: {count}"
+    },
+    "message": {
+      "title": "Message Content",
+      "placeholder": "Enter your message...",
+      "characters": "{count}/160 characters",
+      "preview": "Preview",
+      "personalization": "Personalization",
+      "insertVariable": "Insert Variable",
+      "variables": {
+        "name": "Name",
+        "phone": "Phone",
+        "email": "Email"
+      }
+    },
+    "schedule": {
+      "title": "Send Time",
+      "now": "Send Now",
+      "scheduled": "Schedule for Later",
+      "date": "Date",
+      "time": "Time",
+      "timezone": "Timezone"
+    }
+  },
+  "status": {
+    "draft": "Draft",
+    "scheduled": "Scheduled",
+    "sending": "Sending",
+    "sent": "Sent",
+    "paused": "Paused",
+    "cancelled": "Cancelled",
+    "failed": "Failed"
+  },
+  "actions": {
+    "create": "Create Campaign",
+    "edit": "Edit",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "pause": "Pause",
+    "resume": "Resume",
+    "cancel": "Cancel",
+    "sendNow": "Send Now",
+    "schedule": "Schedule"
+  },
+  "stats": {
+    "sent": "Sent",
+    "delivered": "Delivered",
+    "opened": "Opened",
+    "clicked": "Clicked",
+    "converted": "Converted",
+    "failed": "Failed",
+    "unsubscribed": "Unsubscribed"
+  },
+  "confirmDelete": {
+    "title": "Delete Campaign",
+    "message": "Are you sure you want to delete '{name}'? This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  }
+}

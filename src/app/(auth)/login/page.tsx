@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -19,7 +19,6 @@ import {
   toast,
 } from '@/components/primitives'
 import { MessageSquare, Mail, Lock, AlertCircle } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const loginSchema = z.object({
   email: z.string().email('유효한 이메일을 입력해주세요'),
@@ -33,7 +32,7 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0 },
 }
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
@@ -215,5 +214,21 @@ export default function LoginPage() {
         </Card>
       </motion.div>
     </div>
+  )
+}
+
+function LoginFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-pingly-200 border-t-pingly-500" />
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginForm />
+    </Suspense>
   )
 }

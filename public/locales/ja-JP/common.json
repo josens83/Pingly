@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "Pingly",
+    "tagline": "スマートメッセージマーケティングプラットフォーム"
+  },
+  "nav": {
+    "home": "ホーム",
+    "dashboard": "ダッシュボード",
+    "campaigns": "キャンペーン",
+    "contacts": "連絡先",
+    "analytics": "分析",
+    "settings": "設定",
+    "billing": "請求",
+    "docs": "ドキュメント",
+    "help": "ヘルプ",
+    "logout": "ログアウト"
+  },
+  "actions": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "update": "更新",
+    "submit": "送信",
+    "confirm": "確認",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "close": "閉じる",
+    "retry": "再試行",
+    "refresh": "更新",
+    "search": "検索",
+    "filter": "フィルター",
+    "export": "エクスポート",
+    "import": "インポート",
+    "download": "ダウンロード",
+    "upload": "アップロード",
+    "copy": "コピー",
+    "share": "共有"
+  },
+  "status": {
+    "loading": "読み込み中...",
+    "saving": "保存中...",
+    "processing": "処理中...",
+    "success": "成功",
+    "error": "エラー",
+    "warning": "警告",
+    "info": "情報",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "active": "アクティブ",
+    "inactive": "非アクティブ",
+    "pending": "保留中",
+    "completed": "完了",
+    "failed": "失敗",
+    "draft": "下書き",
+    "published": "公開済み",
+    "scheduled": "予約済み"
+  },
+  "errors": {
+    "generic": "エラーが発生しました。もう一度お試しください。",
+    "network": "ネットワークエラーが発生しました。インターネット接続を確認してください。",
+    "notFound": "リソースが見つかりませんでした。",
+    "unauthorized": "認証が必要です。ログインしてください。",
+    "forbidden": "アクセス権限がありません。",
+    "validation": "入力内容を確認してください。",
+    "serverError": "サーバーエラーが発生しました。しばらくしてから再度お試しください。"
+  },
+  "time": {
+    "now": "たった今",
+    "minutesAgo": "{count}分前",
+    "hoursAgo": "{count}時間前",
+    "daysAgo": "{count}日前",
+    "weeksAgo": "{count}週間前",
+    "monthsAgo": "{count}ヶ月前",
+    "yearsAgo": "{count}年前"
+  },
+  "pagination": {
+    "showing": "{from} - {to} / {total}件中",
+    "itemsPerPage": "ページあたりの表示件数",
+    "goToPage": "ページへ移動"
+  },
+  "empty": {
+    "noData": "データがありません",
+    "noResults": "検索結果がありません",
+    "noItems": "項目がありません"
+  }
+}

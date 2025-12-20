@@ -1,0 +1,89 @@
+{
+  "app": {
+    "name": "Pingly",
+    "tagline": "Smart Message Marketing Platform"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "campaigns": "Campaigns",
+    "contacts": "Contacts",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "billing": "Billing",
+    "docs": "Docs",
+    "help": "Help",
+    "logout": "Logout"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "download": "Download",
+    "upload": "Upload",
+    "copy": "Copy",
+    "share": "Share"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "processing": "Processing...",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "online": "Online",
+    "offline": "Offline",
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "draft": "Draft",
+    "published": "Published",
+    "scheduled": "Scheduled"
+  },
+  "errors": {
+    "generic": "An error occurred. Please try again.",
+    "network": "Network error. Please check your internet connection.",
+    "notFound": "The requested resource was not found.",
+    "unauthorized": "Authentication required. Please log in.",
+    "forbidden": "You don't have permission to access this resource.",
+    "validation": "Please check your input.",
+    "serverError": "Server error. Please try again later."
+  },
+  "time": {
+    "now": "Just now",
+    "minutesAgo": "{count, plural, one {# minute} other {# minutes}} ago",
+    "hoursAgo": "{count, plural, one {# hour} other {# hours}} ago",
+    "daysAgo": "{count, plural, one {# day} other {# days}} ago",
+    "weeksAgo": "{count, plural, one {# week} other {# weeks}} ago",
+    "monthsAgo": "{count, plural, one {# month} other {# months}} ago",
+    "yearsAgo": "{count, plural, one {# year} other {# years}} ago"
+  },
+  "pagination": {
+    "showing": "{from} - {to} of {total}",
+    "itemsPerPage": "Items per page",
+    "goToPage": "Go to page"
+  },
+  "empty": {
+    "noData": "No data available",
+    "noResults": "No results found",
+    "noItems": "No items"
+  }
+}
