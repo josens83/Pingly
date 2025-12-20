@@ -15,3 +15,14 @@ export {
   type WebSocketMessage,
   type RoomInfo
 } from './WebSocketClient';
+
+export {
+  useWebSocketConnection,
+  useWebSocketSend,
+  useWebSocketRoom,
+  usePresence,
+  useRealtimeSync,
+  useRealtimeNotifications,
+  type PresenceUser,
+  type Notification
+} from './hooks';

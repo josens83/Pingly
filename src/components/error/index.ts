@@ -1,8 +1,16 @@
 /**
  * Error Components Index
+ *
+ * Enterprise-grade error handling and graceful degradation.
  */
 
-export { ErrorBoundary, withErrorBoundary } from '@/lib/monitoring/ErrorBoundary'
+export {
+  ErrorBoundary,
+  ErrorBoundaryWrapper,
+  AsyncErrorBoundary,
+  withErrorBoundary
+} from './ErrorBoundary';
+
 export {
   OfflineDetector,
   LoadingFallback,
@@ -12,4 +20,4 @@ export {
   SkeletonCard,
   SkeletonTable,
   SkeletonChart,
-} from './GracefulDegradation'
+} from './GracefulDegradation';

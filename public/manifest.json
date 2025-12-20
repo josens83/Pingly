@@ -1,60 +1,97 @@
 {
-  "name": "Pingly - SMS & 메신저 마케팅 플랫폼",
+  "name": "Pingly - 스마트 메시지 마케팅",
   "short_name": "Pingly",
-  "description": "효과적인 메시지 마케팅 플랫폼",
+  "description": "SMS 및 메신저 마케팅을 위한 스마트 플랫폼",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3B82F6",
-  "orientation": "portrait-primary",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "theme_color": "#6366F1",
+  "background_color": "#FFFFFF",
+  "lang": "ko-KR",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "marketing"],
   "icons": [
     {
       "src": "/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable any"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "새 메시지 작성",
+      "short_name": "새 메시지",
+      "description": "새로운 메시지를 작성합니다",
+      "url": "/dashboard/messages/new"
+    },
+    {
+      "name": "캠페인 관리",
+      "short_name": "캠페인",
+      "description": "마케팅 캠페인을 관리합니다",
+      "url": "/dashboard/campaigns"
+    },
+    {
+      "name": "연락처",
+      "short_name": "연락처",
+      "description": "연락처 목록을 확인합니다",
+      "url": "/dashboard/contacts"
+    },
+    {
+      "name": "분석 대시보드",
+      "short_name": "분석",
+      "description": "마케팅 성과를 분석합니다",
+      "url": "/dashboard/analytics"
     }
   ],
   "screenshots": [
@@ -63,17 +100,35 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Dashboard"
+      "label": "대시보드 화면"
     },
     {
       "src": "/screenshots/mobile.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Mobile Dashboard"
+      "label": "모바일 대시보드"
     }
   ],
-  "categories": ["business", "productivity"],
-  "lang": "ko-KR",
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+pingly",
+      "url": "/handle?url=%s"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
   "prefer_related_applications": false
 }

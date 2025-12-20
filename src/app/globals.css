@@ -398,3 +398,164 @@
   src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
   font-display: swap;
 }
+
+/* ===========================================
+   Enterprise Features - PWA & Offline
+   =========================================== */
+
+/* Offline Indicator */
+.offline-indicator {
+  @apply fixed bottom-4 left-1/2 -translate-x-1/2 z-50;
+  @apply bg-amber-500 text-white px-4 py-2 rounded-full;
+  @apply flex items-center gap-2 shadow-lg;
+  @apply animate-slide-up;
+}
+
+.offline-indicator.online {
+  @apply bg-green-500;
+}
+
+/* PWA Install Banner */
+.pwa-install-banner {
+  @apply fixed bottom-0 left-0 right-0 z-50;
+  @apply bg-primary text-white p-4;
+  @apply flex items-center justify-between;
+  @apply animate-slide-up;
+}
+
+/* Update Available Toast */
+.update-toast {
+  @apply fixed bottom-4 right-4 z-50;
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl;
+  @apply p-4 max-w-sm;
+  @apply border border-gray-200 dark:border-gray-700;
+  @apply animate-slide-up;
+}
+
+/* Real-time Presence Cursor */
+.presence-cursor {
+  @apply fixed pointer-events-none z-[9999];
+  @apply transition-all duration-100 ease-out;
+}
+
+.presence-cursor-label {
+  @apply absolute -top-6 left-4;
+  @apply bg-current text-white text-xs px-2 py-0.5 rounded;
+  @apply whitespace-nowrap;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  @apply flex items-center gap-1;
+}
+
+.typing-indicator span {
+  @apply w-2 h-2 bg-gray-400 rounded-full;
+  animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* Feature Flag Debug Badge */
+.feature-flag-badge {
+  @apply fixed top-4 right-4 z-50;
+  @apply bg-purple-500 text-white text-xs px-2 py-1 rounded;
+  @apply opacity-50 hover:opacity-100 transition-opacity;
+}
+
+/* A/B Test Variant Indicator */
+.ab-test-indicator {
+  @apply fixed top-4 left-4 z-50;
+  @apply bg-blue-500 text-white text-xs px-2 py-1 rounded;
+  @apply opacity-50 hover:opacity-100 transition-opacity;
+}
+
+/* Sync Status Indicator */
+.sync-status {
+  @apply fixed bottom-4 right-4 z-40;
+  @apply flex items-center gap-2;
+  @apply bg-white dark:bg-gray-800 rounded-full px-3 py-1.5;
+  @apply shadow-md border border-gray-200 dark:border-gray-700;
+  @apply text-sm;
+}
+
+.sync-status.syncing {
+  @apply animate-pulse;
+}
+
+.sync-status .sync-icon {
+  @apply w-4 h-4;
+}
+
+.sync-status.syncing .sync-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .rtl\:flip {
+  transform: scaleX(-1);
+}
+
+/* PWA Safe Area Insets */
+.safe-area-inset-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-inset-left {
+  padding-left: env(safe-area-inset-left);
+}
+
+.safe-area-inset-right {
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Window Controls Overlay (PWA) */
+@supports (padding: env(titlebar-area-x)) {
+  .titlebar-area {
+    position: absolute;
+    left: env(titlebar-area-x, 0);
+    top: env(titlebar-area-y, 0);
+    width: env(titlebar-area-width, 100%);
+    height: env(titlebar-area-height, 33px);
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+
+  .titlebar-area button,
+  .titlebar-area a {
+    -webkit-app-region: no-drag;
+    app-region: no-drag;
+  }
+}
